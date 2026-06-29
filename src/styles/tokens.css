@@ -1,0 +1,55 @@
+:root {
+  /* Superfícies — tom violeta profundo autoral */
+  --pl-bg: #0a0b12;
+  --pl-bg-deep: #06070c;
+  --pl-surface: #12131c;
+  --pl-elevated: #1a1b28;
+  --pl-glass: rgba(26, 27, 40, 0.72);
+  --pl-border: #2a2b3d;
+  --pl-border-subtle: #1e1f2e;
+  --pl-hover: #252638;
+
+  /* Marca Velora — violeta elétrico + ciano néon */
+  --pl-primary: #7c5cff;
+  --pl-primary-bright: #9d82ff;
+  --pl-primary-dim: #5a3fd4;
+  --pl-accent: #00e5cc;
+  --pl-accent-dim: #00b8a3;
+  --pl-gradient-brand: linear-gradient(135deg, #7c5cff 0%, #00e5cc 100%);
+  --pl-gradient-live: linear-gradient(135deg, #6b4ce6 0%, #00e5cc 45%, #7c5cff 100%);
+  --pl-gradient-mesh:
+    radial-gradient(ellipse 80% 50% at 20% -10%, rgba(124, 92, 255, 0.18), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 100%, rgba(0, 229, 204, 0.08), transparent),
+    var(--pl-bg);
+
+  /* Texto */
+  --pl-text: #eef0f8;
+  --pl-text-muted: #8b8fa8;
+  --pl-text-dim: #565a72;
+
+  /* Plataformas — só chat/badges */
+  --pl-tiktok: #ff4668;
+  --pl-twitch: #9b72f2;
+
+  /* Semântica */
+  --pl-success: #2ee59d;
+  --pl-warning: #f5c542;
+  --pl-danger: #ff6b6b;
+  --pl-live: #ff4757;
+
+  /* Tipografia */
+  --font-sans: system-ui, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
+
+  /* Forma */
+  --pl-radius-sm: 6px;
+  --pl-radius-md: 10px;
+  --pl-radius-lg: 14px;
+  --pl-radius-xl: 18px;
+  --pl-radius-full: 9999px;
+
+  /* Efeitos autorais */
+  --pl-shadow-glow: 0 0 28px rgba(124, 92, 255, 0.4);
+  --pl-shadow-glow-accent: 0 0 24px rgba(0, 229, 204, 0.3);
+  --pl-shadow-panel: 0 4px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}

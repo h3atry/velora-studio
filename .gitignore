@@ -1,0 +1,9 @@
+node_modules
+dist
+dist-electron
+release
+.tools
+.env
+oauth-credentials.json
+*.log
+.DS_Store

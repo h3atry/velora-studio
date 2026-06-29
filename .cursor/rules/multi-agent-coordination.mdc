@@ -1,0 +1,51 @@
+---
+description: Orquestrar subagentes Cursor em paralelo — OBRIGATÓRIO em tarefas multi-zona
+alwaysApply: true
+---
+
+# Multi-agente (subagentes do assistente)
+
+Projeto: **Velora** (não PrismLive).
+
+Esta regra governa **como o assistente trabalha**. O usuário NÃO abre vários chats.
+
+## Obrigatório: lançar Task em paralelo
+
+Quando a tarefa envolver **2+ zonas** (design + ui, integrations + ui, streaming + ui, etc.):
+
+1. **Na mesma resposta**, lance subagentes via ferramenta **Task** (um por zona).
+2. **Não implemente tudo sozinho** se as zonas forem independentes — delegue e integre depois.
+3. Se Task falhar (limite/indisponível), **simule o protocolo**: declare `ZONA: design` / `ZONA: ui` em blocos separados e trabalhe em sequência design → ui → typecheck.
+
+### Template de prompt por subagente
+
+```
+ZONA: [design|ui|integrations|streaming]
+Arquivos permitidos: [lista explícita]
+Proibido: [lista]
+Entregável: [o que deve retornar]
+```
+
+## Papéis
+
+| Subagente | Zona | Escopo |
+|-----------|------|--------|
+| Orquestrador | — | Planeja, lança Tasks, integra, typecheck |
+| Design | `design` | tokens, brand, prism-ui.css, public/brand/, tailwind |
+| UI | `ui` | src/components, views, hooks (sem electron) |
+| Integrações | `integrations` | electron/auth, chat, mobileChatServer, IPC |
+| Streaming | `streaming` | streamService, FFmpeg |
+
+## Protocolo anti-conflito
+
+1. Um subagente = uma zona por vez.
+2. Contratos IPC: fila única integrations → ui.
+3. Merge: **design → backend → ui → orquestrador revisa**.
+4. Nunca dois subagentes no mesmo arquivo.
+5. Handoff: `npm run typecheck` + `npm run sync` se alterou src/electron/marca/assets.
+
+## Exemplo (tarefa identidade visual)
+
+- **Task design**: tokens, icon.png, BrandMark, prism-ui.css
+- **Task ui**: aplicar classes em todos os componentes
+- **Orquestrador**: integra, typecheck, `npm run sync`

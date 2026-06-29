@@ -1,0 +1,24 @@
+/**
+ * Velora UI — camada de design autoral.
+ * Importa prism-ui (legado pl-*) e expõe aliases vl-* para migração gradual.
+ */
+@import './prism-ui.css';
+
+:root {
+  --vl-bg: var(--pl-bg);
+  --vl-surface: var(--pl-surface);
+  --vl-primary: var(--pl-primary);
+  --vl-accent: var(--pl-accent);
+  --vl-text: var(--pl-text);
+  --vl-border: var(--pl-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

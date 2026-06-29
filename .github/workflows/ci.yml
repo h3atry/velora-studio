@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run test
+      - run: npm run lint
+        continue-on-error: true
+      - run: npm run build:ci
+        env:
+          CI: true
+      - name: Smoke test
+        run: powershell -NoProfile -File scripts/smoke-test.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: velora-win-unpacked
+          path: release/win-unpacked/
+          if-no-files-found: error

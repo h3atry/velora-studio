@@ -1,0 +1,104 @@
+{
+  "name": "velora",
+  "version": "0.1.0",
+  "author": "Velora Studio",
+  "description": "Velora — estúdio multicanal de live (TikTok + Twitch)",
+  "main": "dist-electron/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build && electron-builder --win dir",
+    "build:installer": "tsc --noEmit && vite build && electron-builder --win nsis",
+    "build:ci": "npm run build || npm run build:installer",
+    "sync": "powershell -NoProfile -File sync-build.ps1",
+    "icons": "node scripts/generate-icons.mjs",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "node scripts/e2e-smoke.mjs",
+    "lint": "eslint src electron --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "electron-updater": "^6.3.9",
+    "ffmpeg-static": "^5.3.0",
+    "lucide-react": "^0.469.0",
+    "qrcode": "^1.5.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "selfsigned": "^5.5.0",
+    "tiktok-live-connector": "^2.4.0",
+    "tmi.js": "^1.8.5",
+    "zustand": "^5.0.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.2",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
+    "png-to-ico": "^3.0.1",
+    "postcss": "^8.4.49",
+    "sharp": "^0.35.2",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.2",
+    "vite": "^6.0.6",
+    "vite-plugin-electron": "^0.28.8",
+    "vite-plugin-electron-renderer": "^0.14.6",
+    "vitest": "^2.1.8"
+  },
+  "build": {
+    "appId": "com.velora.studio",
+    "productName": "Velora",
+    "directories": {
+      "output": "release",
+      "buildResources": "public/brand"
+    },
+    "electronDist": "node_modules/electron/dist",
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "oauth-credentials.json",
+        "to": "oauth-credentials.json",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "asarUnpack": [
+      "node_modules/ffmpeg-static/**"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "public/brand/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "velora",
+      "repo": "velora"
+    }
+  }
+}

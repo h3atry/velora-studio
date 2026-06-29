@@ -1,0 +1,109 @@
+/* Velora — componentes visuais autorais */
+
+.pl-mesh-bg {
+  background-color: var(--pl-bg);
+  background-image: var(--pl-gradient-mesh);
+}
+
+.pl-panel {
+  background: var(--pl-glass);
+  border: 1px solid var(--pl-border-subtle);
+  box-shadow: var(--pl-shadow-panel);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.pl-panel-solid {
+  background: var(--pl-surface);
+  border: 1px solid var(--pl-border-subtle);
+  box-shadow: var(--pl-shadow-panel);
+}
+
+.pl-sidebar-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--pl-radius-md);
+  padding: 0.375rem 0.5rem;
+  font-size: 0.75rem;
+  color: var(--pl-text-muted);
+  transition: background 0.15s, color 0.15s;
+}
+
+.pl-sidebar-item:hover {
+  background: var(--pl-hover);
+  color: var(--pl-text);
+}
+
+.pl-sidebar-item-active {
+  background: rgba(124, 92, 255, 0.2);
+  color: var(--pl-primary-bright);
+  box-shadow: inset 0 0 0 1px rgba(124, 92, 255, 0.35);
+}
+
+.pl-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: var(--pl-radius-full);
+  border: 1px solid var(--pl-border);
+  background: rgba(124, 92, 255, 0.08);
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--pl-text-muted);
+}
+
+.pl-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--pl-border), transparent);
+}
+
+.pl-section-label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pl-text-dim);
+}
+
+.pl-live-pulse {
+  animation: pl-pulse-live 2s ease-in-out infinite;
+}
+
+@keyframes pl-pulse-live {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.45); }
+  50% { box-shadow: 0 0 0 8px rgba(255, 71, 87, 0); }
+}
+
+.pl-preview-frame {
+  border-radius: var(--pl-radius-lg);
+  border: 1px solid var(--pl-border-subtle);
+  background: var(--pl-bg-deep);
+  box-shadow:
+    inset 0 0 0 1px rgba(124, 92, 255, 0.06),
+    0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.pl-titlebar {
+  background: rgba(10, 11, 18, 0.85);
+  border-bottom: 1px solid var(--pl-border-subtle);
+  backdrop-filter: blur(8px);
+  -webkit-app-region: drag;
+}
+
+.pl-glow-ring {
+  position: relative;
+}
+
+.pl-glow-ring::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: var(--pl-gradient-brand);
+  opacity: 0.35;
+  z-index: -1;
+  filter: blur(6px);
+}

@@ -1,0 +1,56 @@
+@import './styles/tokens.css';
+@import './styles/velora-ui.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  background-color: var(--pl-bg);
+  color: var(--pl-text);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--pl-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--pl-hover);
+}
+
+@layer components {
+  .input-field {
+    @apply w-full rounded-pl border border-pl-border bg-pl-bg px-3 py-1.5 text-xs text-pl-text outline-none transition-colors placeholder:text-pl-dim focus:border-pl-primary focus:ring-1 focus:ring-pl-primary/40;
+  }
+
+  .btn-brand {
+    @apply bg-gradient-to-br from-pl-primary to-pl-accent font-semibold text-pl-bg shadow-pl-glow transition-all hover:brightness-110 active:scale-[0.98];
+  }
+
+  .btn-brand-outline {
+    @apply border border-pl-primary/50 bg-pl-primary/10 text-pl-primary-bright transition-colors hover:bg-pl-primary/20;
+  }
+
+  .panel-surface {
+    @apply border border-pl-border bg-pl-surface;
+  }
+}

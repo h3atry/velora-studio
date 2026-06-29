@@ -1,0 +1,24 @@
+---
+description: Identidade visual Velora — tokens, marca e componentes autorais
+globs: src/**/*.{tsx,css},tailwind.config.js,public/brand/**
+alwaysApply: false
+---
+
+# Design system Velora
+
+Marca: **Velora** — núcleo luminoso, duas auroras (TikTok + Twitch). **Não** usar nome ou visual de PRISM Live / prismlive.com.
+
+## Tokens (`src/styles/tokens.css`)
+
+- Marca: `--pl-primary` (#7c5cff), `--pl-accent` (#00e5cc)
+- Ícone: `public/brand/icon.png`
+- Logo: `<BrandMark />` + `<BrandWordmark />` → exibe **Velora**
+
+## Classes (`src/styles/prism-ui.css`)
+
+`.pl-mesh-bg`, `.pl-panel`, `.pl-live-pulse`, `.pl-preview-frame`
+
+## Proibido
+
+- Nome PrismLive, PRISM, Prism no produto
+- Accent rosa TikTok como marca principal
