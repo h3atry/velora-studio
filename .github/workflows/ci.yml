@@ -24,7 +24,7 @@ jobs:
           CI: true
       - name: Smoke test
         run: powershell -NoProfile -File scripts/smoke-test.ps1
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: velora-win-unpacked
           path: release/win-unpacked/
