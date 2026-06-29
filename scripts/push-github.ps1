@@ -72,7 +72,7 @@ if ($status) {
 $env:GIT_TERMINAL_PROMPT = "0"
 $env:GCM_INTERACTIVE = "never"
 $remote = "https://${user}:$token@github.com/$repo.git"
-git remote remove origin 2>$null | Out-Null
+if (git remote get-url origin 2>$null) { git remote remove origin }
 git remote add origin $remote
 git push -u origin main --force
 
