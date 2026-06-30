@@ -48,6 +48,7 @@ import { initAutoUpdater } from './services/autoUpdater';
 import { startAlertsServer } from './services/alertsServer';
 import { loadChatFilters } from './services/persistStore';
 import { setChatFilters } from './chatService';
+import { applyAppIcon, configureAppIdentity } from './appIcon';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -142,6 +143,7 @@ function createMainWindow() {
     minHeight: 700,
     show: false,
     backgroundColor: '#0a0b12',
+    title: 'Velora',
     titleBarStyle: 'hidden',
     titleBarOverlay: {
       color: '#0a0b12',
@@ -156,6 +158,8 @@ function createMainWindow() {
       backgroundThrottling: false,
     },
   });
+
+  applyAppIcon(mainWindow);
 
   mainWindow.once('ready-to-show', () => {
     const ttiMs = Date.now() - appStartTime;
@@ -227,6 +231,8 @@ function createChatWindow(mode: 'popout' | 'overlay') {
       nodeIntegration: false,
     },
   });
+
+  applyAppIcon(win);
 
   win.setMenu(null);
   win.setMenuBarVisibility(false);
@@ -439,6 +445,7 @@ app.on('second-instance', () => {
 });
 
 app.whenReady().then(() => {
+  configureAppIdentity();
   installCrashHandlers();
   logInfo('Velora iniciando', { packaged: app.isPackaged, version: app.getVersion() });
 

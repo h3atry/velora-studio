@@ -15,6 +15,9 @@ jobs:
           node-version: '20'
           cache: npm
       - run: npm ci
+      - name: OAuth placeholder for CI build
+        shell: cmd
+        run: copy /Y oauth-credentials.json.example oauth-credentials.json
       - run: npm run typecheck
       - run: npm run test
       - run: npm run lint

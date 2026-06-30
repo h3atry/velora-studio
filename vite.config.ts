@@ -13,7 +13,7 @@ export default defineConfig({
           build: {
             outDir: 'dist-electron',
             rollupOptions: {
-            external: ['electron', 'ffmpeg-static', 'tmi.js', 'tiktok-live-connector', 'dotenv'],
+            external: ['electron', 'tmi.js', 'tiktok-live-connector', 'dotenv'],
             },
           },
         },

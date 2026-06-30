@@ -199,6 +199,10 @@ declare global {
       gdprExport?: () => Promise<{ ok: boolean; path?: string; error?: string }>;
       gdprDelete?: () => Promise<{ ok: boolean; error?: string }>;
       dialogOpenImage?: () => Promise<string | null>;
+      dialogOpenVideo?: () => Promise<string | null>;
+      captureListSources?: () => Promise<
+        { id: string; name: string; type: 'screen' | 'window'; thumbnailDataUrl: string }[]
+      >;
       streamTest?: (config: unknown) => Promise<{ ok: boolean; error?: string }>;
       streamPresets?: () => Promise<unknown>;
       ffmpegAvailable?: () => Promise<boolean>;

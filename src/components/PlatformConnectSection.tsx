@@ -92,7 +92,7 @@ function PlatformCard({
   return (
     <div className="rounded-lg border border-pl-border bg-pl-bg p-3">
       <div className="mb-3 flex items-center gap-2">
-        <PlatformIcon platform={platform} size={18} />
+        <PlatformIcon platform={platform} size={20} />
         <div className="flex-1">
           <p className="text-xs font-medium text-white">{name}</p>
           {connected ? (

@@ -1,39 +1,36 @@
 ---
-description: Sempre rebuildar e sincronizar dist/release após mudanças — nunca deixar build antiga
+description: Dev com hot reload por defeito; rebuild release so quando necessario
 alwaysApply: true
 ---
 
-# Build sempre atualizada (Velora)
+# Build e desenvolvimento (Velora)
 
-Mudanças no código **não aparecem** no `.exe` até rebuild. Nunca encerre tarefa deixando build stale.
+## Regra principal
 
-## Quando rebuildar (obrigatório)
+**Durante desenvolvimento, NÃO pedir rebuild manual.** Mudancas em `src/` aparecem sozinhas com hot reload.
 
-| Alterou | Comando mínimo |
-|---------|----------------|
-| `src/**`, `index.html`, CSS, assets, marca | `npm run build` ou `.\sync-build.ps1` |
-| `electron/**`, `preload`, IPC | `npm run build` (full) |
-| Só docs/regras sem runtime | rebuild não necessário |
+O atalho **Velora.lnk** abre dev mode (`velora-dev.vbs` → Vite + Electron HMR). **Um unico atalho** — nunca criar "Velora Release" ou duplicados no desktop.
 
-## Checklist antes de handoff
+## Quando rebuildar (`npm run sync`)
 
-1. `npm run typecheck` — passou
-2. `dist/index.html` reflete `index.html` (título **Velora**, favicon `/brand/icon.png`)
-3. `release/win-unpacked/Velora.exe` existe e é posterior às edits
-4. **Não** deixar `PrismLive.exe` como único executável
-5. Atalho desktop: `Velora.lnk` → `release\win-unpacked\Velora.exe`
-6. Matar processos antigos antes de rebuild: `Stop-Process -Name Velora,PrismLive -Force -ErrorAction SilentlyContinue`
+So quando o utilizador pede build/release ou handoff final para testar `.exe` em `release/win-unpacked/`.
+
+| Alterou | Acao |
+|---------|------|
+| `src/**`, CSS, assets | Hot reload automatico |
+| `electron/**`, preload, IPC | Reinicia Electron no dev |
+| Release/distribuicao | `npm run sync` |
 
 ## Proibido
 
-- Dizer "pronto" após mudar UI/marca/electron sem rebuild
-- Commitar só source com `dist/` desatualizado se o repo versiona `dist/` (preferir rebuild local)
-- Referenciar `PrismLive` — produto é **Velora** (`productName` no `package.json`)
+- Criar dois atalhos (dev + release) no desktop
+- Dizer "corre npm run sync" apos cada fix de UI
+- Referenciar `PrismLive`
 
-## Comando padrão pós-entrega
+## Comandos
 
 ```powershell
-.\sync-build.ps1
+npm run dev       # hot reload
+npm run sync      # .exe empacotado (raro)
+npm run shortcuts # recriar Velora.lnk
 ```
-
-Rebuild + atalho + verificação de artefatos.

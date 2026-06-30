@@ -42,7 +42,7 @@ if ($distHtml -notmatch '<title>Velora</title>') {
   Write-Error "FALHA: dist/index.html desatualizado (titulo nao e Velora)"
 }
 
-Write-Host "[3/4] atalho desktop + .env.example..." -ForegroundColor Yellow
+Write-Host "[3/4] atalhos desktop + .env.example..." -ForegroundColor Yellow
 $EnvExample = Join-Path $Root ".env.example"
 $EnvDest = Join-Path (Split-Path $Exe) ".env.example"
 if (Test-Path $EnvExample) {
@@ -56,20 +56,7 @@ if (Test-Path $OAuthCreds) {
 } else {
   Write-Host "  OAuth: oauth-credentials.json ausente (Conectar conta desabilitado ate incluir)" -ForegroundColor Yellow
 }
-$Desktop = [Environment]::GetFolderPath("Desktop")
-$Old = Join-Path $Desktop "PrismLive.lnk"
-$New = Join-Path $Desktop "Velora.lnk"
-if (Test-Path $Old) { Remove-Item $Old -Force }
-$Wsh = New-Object -ComObject WScript.Shell
-$Sc = $Wsh.CreateShortcut($New)
-$Sc.TargetPath = $Exe
-$Sc.WorkingDirectory = Split-Path $Exe
-$Sc.Description = "Velora - estudio multicanal de live"
-$IconSrc = Join-Path $Root "public\brand\icon.ico"
-$IconBust = Join-Path $env:TEMP ("velora-icon-" + (Get-Item $IconSrc).LastWriteTime.Ticks + ".ico")
-Copy-Item $IconSrc $IconBust -Force
-$Sc.IconLocation = "$IconBust,0"
-$Sc.Save()
+& (Join-Path $Root "scripts\create-shortcuts.ps1") -Root $Root
 
 Write-Host "[4/4] verificacao..." -ForegroundColor Yellow
 $iconOk = (Test-Path (Join-Path $Root "public\brand\icon.ico")) -and (Test-Path (Join-Path $Root "public\brand\icon.png"))
@@ -79,4 +66,4 @@ Write-Host "OK - build sincronizada" -ForegroundColor Green
 Write-Host "  EXE:     $Exe"
 Write-Host "  Modificado: $exeTime"
 Write-Host "  Icone:   $(if ($iconOk) { 'icon.ico + icon.png (512x512)' } else { 'AUSENTE' })"
-Write-Host "  Atalho:  $New"
+Write-Host "  Atalho: Velora.lnk (hot reload)"

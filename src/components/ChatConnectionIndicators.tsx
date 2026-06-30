@@ -58,7 +58,7 @@ function Indicator({
       title={title}
       aria-label={title}
     >
-      <PlatformIcon platform={platform} size={10} />
+      <PlatformIcon platform={platform} size={14} />
       <span className={`h-1.5 w-1.5 rounded-full ${statusColors[state]}`} />
       {error && state === 'error' && (
         <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-1 hidden w-48 -translate-x-1/2 rounded bg-zinc-900 px-2 py-1 text-[9px] text-red-300 shadow-lg group-hover:block">

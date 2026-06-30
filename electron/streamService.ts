@@ -1,9 +1,11 @@
 import { spawn, type ChildProcessWithoutNullStreams } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import { createRequire } from 'module';
 import { app } from 'electron';
-import ffmpegPath from 'ffmpeg-static';
 import { logError, logInfo } from './crashLogger';
+
+const require = createRequire(import.meta.url);
 import { translateFfmpegExitCode, translateFfmpegMessage } from './utils/ffmpegErrors';
 import { redactSecrets } from './utils/logRedact';
 
@@ -90,11 +92,42 @@ export function isFfmpegAvailable(): boolean {
 }
 
 function getFfmpegPath(): string {
-  if (!ffmpegPath) throw new Error('FFmpeg não encontrado no pacote');
-  if (!fs.existsSync(ffmpegPath)) {
-    throw new Error(`FFmpeg ausente em: ${ffmpegPath}`);
+  const candidates: string[] = [];
+
+  if (process.env.FFMPEG_BIN) {
+    candidates.push(process.env.FFMPEG_BIN);
   }
-  return ffmpegPath;
+
+  if (app.isPackaged) {
+    candidates.push(
+      path.join(process.resourcesPath, 'ffmpeg', 'ffmpeg.exe'),
+      path.join(
+        process.resourcesPath,
+        'app.asar.unpacked',
+        'node_modules',
+        'ffmpeg-static',
+        'ffmpeg.exe'
+      )
+    );
+  } else {
+    candidates.push(
+      path.join(process.cwd(), 'node_modules', 'ffmpeg-static', 'ffmpeg.exe'),
+      path.join(__dirname, '../node_modules/ffmpeg-static/ffmpeg.exe'),
+      path.join(__dirname, '../../node_modules/ffmpeg-static/ffmpeg.exe')
+    );
+    try {
+      const fromModule = require('ffmpeg-static') as string | null;
+      if (fromModule) candidates.push(fromModule);
+    } catch {
+      /* dev fallback */
+    }
+  }
+
+  for (const candidate of candidates) {
+    if (candidate && fs.existsSync(candidate)) return candidate;
+  }
+
+  throw new Error('FFmpeg não encontrado. Execute npm run build para embarcar o binário.');
 }
 
 function dshowInput(config: StreamConfig): string {

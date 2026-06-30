@@ -30,17 +30,22 @@ No Windows, o DirectShow não permite dois consumidores no mesmo dispositivo de 
 
 Marca **Velora** — núcleo luminoso + duas auroras (TikTok/Twitch). Ícone: `public/brand/icon.png`, logo: `<BrandMark />`, tokens: `src/styles/tokens.css`.
 
-## Development
+## Development (hot reload — sem rebuild)
+
+Abre o atalho **Velora** na área de trabalho, ou:
 
 ```powershell
 .\dev.ps1
+# ou: npm run dev
 ```
 
-## Build desktop
+Mudanças em `src/` recarregam sozinhas. **Não precisa** de `npm run sync` a cada alteração.
+
+## Build release (.exe empacotado)
 
 ```powershell
 .\sync-build.ps1
 # ou: npm run sync
 ```
 
-Gera `dist/`, `Velora.exe` e atalho **Velora.lnk** — obrigatório após mudar UI/electron/marca (regra `.cursor/rules/build-sync.mdc`).
+Gera `Velora.exe` em `release/win-unpacked/` — só se precisares testar o instalável. O atalho **Velora** na área de trabalho continua a ser dev com hot reload.

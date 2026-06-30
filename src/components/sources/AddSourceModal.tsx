@@ -5,7 +5,9 @@ import {
   type SourceCatalogItem,
   type SourceTypeId,
   isSourceImplemented,
+  sourceNeedsConfigureStep,
 } from '@/data/sourceCatalog';
+import { ConfigureSourceForm } from '@/components/sources/ConfigureSourceForm';
 import { useSceneStore } from '@/stores/sceneStore';
 import { Plus, X } from 'lucide-react';
 
@@ -15,19 +17,26 @@ export function AddSourceModal() {
   const addSource = useSceneStore((s) => s.addSourceToActiveScene);
 
   const [selectedId, setSelectedId] = useState<SourceTypeId>('camera');
+  const [step, setStep] = useState<'pick' | 'configure'>('pick');
 
   useEffect(() => {
-    if (show) setSelectedId('camera');
+    if (show) {
+      setSelectedId('camera');
+      setStep('pick');
+    }
   }, [show]);
 
   useEffect(() => {
     if (!show) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close();
+      if (e.key === 'Escape') {
+        if (step === 'configure') setStep('pick');
+        else close();
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [show, close]);
+  }, [show, close, step]);
 
   if (!show) return null;
 
@@ -35,6 +44,27 @@ export function AddSourceModal() {
   const general = SOURCE_CATALOG.filter((s) => s.category === 'general');
   const widgets = SOURCE_CATALOG.filter((s) => s.category === 'widget');
   const canAdd = isSourceImplemented(selectedId);
+
+  if (step === 'configure') {
+    return (
+      <div
+        className="fixed inset-0 z-[120] flex items-center justify-center bg-black/75 p-6"
+        onClick={close}
+        role="presentation"
+      >
+        <ConfigureSourceForm
+          typeId={selectedId}
+          title={selected.label}
+          onClose={close}
+          onBack={() => setStep('pick')}
+          onConfirm={(config) => {
+            addSource(selectedId, config);
+            close();
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -87,7 +117,14 @@ export function AddSourceModal() {
             <button
               type="button"
               disabled={!canAdd}
-              onClick={() => addSource(selectedId)}
+              onClick={() => {
+                if (sourceNeedsConfigureStep(selectedId)) {
+                  setStep('configure');
+                } else {
+                  addSource(selectedId);
+                  close();
+                }
+              }}
               className="w-full rounded-xl bg-gradient-to-r from-[#ff4668] to-[#ff6b8a] py-3 text-sm font-semibold text-white shadow-lg transition-all hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
             >
               {canAdd ? 'Adicionar' : 'Em breve'}

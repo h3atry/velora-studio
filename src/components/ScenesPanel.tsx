@@ -10,6 +10,8 @@ export function ScenesPanel() {
   const setActiveScene = useSceneStore((s) => s.setActiveScene);
   const addScene = useSceneStore((s) => s.addScene);
   const moveScene = useSceneStore((s) => s.moveScene);
+  const removeScene = useSceneStore((s) => s.removeScene);
+  const renameScene = useSceneStore((s) => s.renameScene);
   const undoRemove = useSceneStore((s) => s.undoRemove);
   const undoRemoveSource = useSceneStore((s) => s.undoRemoveSource);
   const activeScene = scenes.find((s) => s.id === activeSceneId);
@@ -39,13 +41,18 @@ export function ScenesPanel() {
         </div>
         <ul className="mb-3 space-y-0.5">
           {scenes.map((s, index) => (
-            <li key={s.id} className="flex items-center gap-0.5">
+            <li key={s.id} className="group flex items-center gap-0.5">
               <button
                 type="button"
                 onClick={() => setActiveScene(s.id)}
+                onDoubleClick={() => {
+                  const name = window.prompt('Renomear cena', s.name);
+                  if (name) renameScene(s.id, name);
+                }}
                 className={`pl-sidebar-item min-w-0 flex-1 ${
                   activeSceneId === s.id ? 'bg-pl-primary/15 text-pl-accent' : ''
                 }`}
+                title="Duplo clique para renomear"
               >
                 {s.name}
               </button>
@@ -54,7 +61,7 @@ export function ScenesPanel() {
                 title="Mover cena para cima"
                 disabled={index === 0}
                 onClick={() => moveScene(s.id, 'up')}
-                className="rounded p-0.5 text-pl-dim hover:text-pl-text disabled:opacity-30"
+                className="rounded p-0.5 text-pl-dim opacity-0 transition-opacity hover:text-pl-text group-hover:opacity-100 disabled:opacity-20"
               >
                 <ChevronUp size={12} />
               </button>
@@ -63,9 +70,22 @@ export function ScenesPanel() {
                 title="Mover cena para baixo"
                 disabled={index === scenes.length - 1}
                 onClick={() => moveScene(s.id, 'down')}
-                className="rounded p-0.5 text-pl-dim hover:text-pl-text disabled:opacity-30"
+                className="rounded p-0.5 text-pl-dim opacity-0 transition-opacity hover:text-pl-text group-hover:opacity-100 disabled:opacity-20"
               >
                 <ChevronDown size={12} />
+              </button>
+              <button
+                type="button"
+                title={scenes.length <= 1 ? 'Precisa de pelo menos uma cena' : 'Apagar cena'}
+                disabled={scenes.length <= 1}
+                onClick={() => {
+                  if (scenes.length <= 1) return;
+                  if (!window.confirm(`Apagar "${s.name}" e todas as origens desta cena?`)) return;
+                  removeScene(s.id);
+                }}
+                className="rounded p-0.5 text-pl-dim opacity-0 transition-opacity hover:text-pl-danger group-hover:opacity-100 disabled:opacity-20"
+              >
+                <Trash2 size={12} />
               </button>
             </li>
           ))}

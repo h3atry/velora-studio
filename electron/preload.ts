@@ -102,6 +102,11 @@ const electronAPI = {
     }>,
 
   dialogOpenImage: () => ipcRenderer.invoke('dialog-open-image') as Promise<string | null>,
+  dialogOpenVideo: () => ipcRenderer.invoke('dialog-open-video') as Promise<string | null>,
+  captureListSources: () =>
+    ipcRenderer.invoke('capture-list-sources') as Promise<
+      { id: string; name: string; type: 'screen' | 'window'; thumbnailDataUrl: string }[]
+    >,
 
   gdprExport: () => ipcRenderer.invoke('gdpr-export'),
   gdprDelete: () => ipcRenderer.invoke('gdpr-delete'),

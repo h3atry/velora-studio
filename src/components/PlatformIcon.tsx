@@ -1,34 +1,70 @@
 import type { Platform } from '@/types';
 
-const paths: Record<Platform, string> = {
-  tiktok: 'M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z',
-  twitch: 'M11.64 5.5H9.5v7h2.14V5.5zm4.29 0h-2.14v7h2.14V5.5zM5 2L2.5 4.5v13L5 20h13l2.5-2.5V4.5L18 2H5zm11.5 13.5H7V6.5h9.5v9z',
-};
-
-const colors: Record<Platform, string> = {
-  tiktok: '#ff4668',
-  twitch: '#9b72f2',
-};
+const TWITCH_PATH =
+  'M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z';
 
 export function PlatformIcon({
   platform,
   size = 16,
   className = '',
+  variant = 'brand',
 }: {
   platform: Platform;
   size?: number;
   className?: string;
+  /** brand = logos oficiais a cores; mono = cor unica (currentColor) */
+  variant?: 'brand' | 'mono';
 }) {
+  const label = platform === 'tiktok' ? 'TikTok' : 'Twitch';
+
+  if (platform === 'twitch') {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        width={size}
+        height={size}
+        role="img"
+        aria-label={label}
+        className={`inline-block shrink-0 select-none ${className}`}
+      >
+        <path
+          fill={variant === 'brand' ? '#9146FF' : 'currentColor'}
+          d={TWITCH_PATH}
+        />
+      </svg>
+    );
+  }
+
   return (
     <svg
+      viewBox="0 0 48 48"
       width={size}
       height={size}
-      viewBox="0 0 24 24"
-      fill={colors[platform]}
-      className={className}
-      aria-label={platform}
+      role="img"
+      aria-label={label}
+      className={`inline-block shrink-0 select-none ${className}`}
     >
-      <path d={paths[platform]} />
+      {variant === 'brand' ? (
+        <>
+          <path
+            fill="#25F4EE"
+            d="M34.5 14.1V11a8.8 8.8 0 0 1-5.3-1.6v11.9a9.3 9.3 0 1 1-8.3-9.2v4.8a4.5 4.5 0 1 0 3.2 4.3V2h4.7a8.8 8.8 0 0 0 8.8 8.8v3.3a15.4 15.4 0 0 1-8.8-2.7V14.1z"
+          />
+          <path
+            fill="#FE2C55"
+            d="M32.5 12.1V9a8.8 8.8 0 0 1-5.3-1.6v11.9a9.3 9.3 0 1 1-8.3-9.2v4.8a4.5 4.5 0 1 0 3.2 4.3V0h4.7a8.8 8.8 0 0 0 8.8 8.8v3.3a15.4 15.4 0 0 1-8.8-2.7V12.1z"
+          />
+          <path
+            fill="#000"
+            d="M33 13.1V10a8.8 8.8 0 0 1-5.3-1.6v11.9a9.3 9.3 0 1 1-8.3-9.2v4.8a4.5 4.5 0 1 0 3.2 4.3V1h4.7a8.8 8.8 0 0 0 8.8 8.8v3.3a15.4 15.4 0 0 1-8.8-2.7V13.1z"
+          />
+        </>
+      ) : (
+        <path
+          fill="currentColor"
+          d="M33 13.1V10a8.8 8.8 0 0 1-5.3-1.6v11.9a9.3 9.3 0 1 1-8.3-9.2v4.8a4.5 4.5 0 1 0 3.2 4.3V1h4.7a8.8 8.8 0 0 0 8.8 8.8v3.3a15.4 15.4 0 0 1-8.8-2.7V13.1z"
+        />
+      )}
     </svg>
   );
 }

@@ -23,9 +23,13 @@ export function resolveStreamInput(sources: SceneSource[]): {
 
   if (videoSource) {
     const inputSource = VIDEO_MAP[videoSource.typeId] ?? 'camera';
+    const isAnyGame =
+      videoSource.typeId === 'game-capture' && videoSource.captureMode === 'any-fullscreen';
     return {
-      inputSource,
-      captureTarget: videoSource.name,
+      inputSource: isAnyGame ? 'display' : inputSource,
+      captureTarget: isAnyGame
+        ? 'desktop'
+        : videoSource.captureTarget ?? videoSource.name,
       hasCamera,
       hasVideo: true,
     };

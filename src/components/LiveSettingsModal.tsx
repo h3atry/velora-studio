@@ -73,7 +73,7 @@ export function LiveSettingsModal() {
                   : 'opacity-40 hover:opacity-100'
               }`}
             >
-              <PlatformIcon platform={platform} size={22} />
+              <PlatformIcon platform={platform} size={26} />
             </button>
           ))}
         </aside>

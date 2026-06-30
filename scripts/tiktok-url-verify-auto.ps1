@@ -1,4 +1,4 @@
-# Monitora Downloads por tiktok_verify*.html, publica no GitHub Pages e abre o link de teste.
+# Monitora Downloads por tiktok*.html ou tiktok*.txt, publica no GitHub Pages e abre o link de teste.
 param(
     [int]$TimeoutSec = 600
 )
@@ -48,11 +48,16 @@ function Publish-VerifyFile([string]$SourcePath) {
 Write-Host "=== TikTok URL verify auto ===" -ForegroundColor Cyan
 Write-Host "1. Abra developers.tiktok.com -> app Velora Studio -> URL properties"
 Write-Host "2. URL prefix: https://h3atry.github.io/velora-studio/"
-Write-Host "3. Download do arquivo tiktok_verify_*.html"
+Write-Host "3. Download do arquivo tiktok*.txt ou tiktok_verify_*.html"
 Write-Host ""
 Write-Host "Monitorando $Downloads por ate $TimeoutSec s..." -ForegroundColor Yellow
 
-$existing = Get-ChildItem $Downloads -Filter "tiktok*.html" -ErrorAction SilentlyContinue |
+function Get-TikTokVerifyFile {
+    Get-ChildItem -Path $Downloads -ErrorAction SilentlyContinue |
+        Where-Object { $_.Name -like 'tiktok*.txt' -or $_.Name -like 'tiktok*.html' }
+}
+
+$existing = Get-TikTokVerifyFile |
     Sort-Object LastWriteTime -Descending | Select-Object -First 1
 if ($existing -and $existing.LastWriteTime -gt (Get-Date).AddHours(-2)) {
     $url = Publish-VerifyFile $existing.FullName
@@ -63,7 +68,7 @@ if ($existing -and $existing.LastWriteTime -gt (Get-Date).AddHours(-2)) {
 
 $deadline = (Get-Date).AddSeconds($TimeoutSec)
 while ((Get-Date) -lt $deadline) {
-    $hit = Get-ChildItem $Downloads -Filter "tiktok*.html" -ErrorAction SilentlyContinue |
+    $hit = Get-TikTokVerifyFile |
         Where-Object { $_.LastWriteTime -gt (Get-Date).AddMinutes(-5) } |
         Sort-Object LastWriteTime -Descending | Select-Object -First 1
     if ($hit) {
@@ -75,5 +80,5 @@ while ((Get-Date) -lt $deadline) {
     Start-Sleep -Seconds 3
 }
 
-Write-Host "Timeout - arquivo tiktok_verify*.html nao apareceu em Downloads." -ForegroundColor Red
+Write-Host 'Timeout - arquivo tiktok*.txt/html nao apareceu em Downloads.' -ForegroundColor Red
 exit 1

@@ -28,7 +28,7 @@ export function ChatMessageLine({ msg }: { msg: ChatMessage }) {
       className={`flex gap-2 border-l-2 py-1.5 pl-2 pr-1 ${borderColor} ${msg.platform === 'tiktok' ? 'bg-tiktok/5' : 'bg-twitch/5'}`}
     >
       <div className="mt-0.5 shrink-0">
-        <PlatformIcon platform={msg.platform} size={12} />
+        <PlatformIcon platform={msg.platform} size={14} />
       </div>
 
       <div className="min-w-0 flex-1">

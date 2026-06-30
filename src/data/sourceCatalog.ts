@@ -67,6 +67,12 @@ export function isSourceImplemented(id: SourceTypeId): boolean {
   return IMPLEMENTED.includes(id);
 }
 
+/** Origens que abrem ecrã de configuração antes de adicionar à cena */
+export function sourceNeedsConfigureStep(id: SourceTypeId): boolean {
+  if (!isSourceImplemented(id)) return false;
+  return !['alert', 'goal', 'chat-box'].includes(id);
+}
+
 export const SOURCE_CATALOG: SourceCatalogItem[] = [
   {
     id: 'game-capture',

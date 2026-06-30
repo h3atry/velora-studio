@@ -36,7 +36,36 @@ export function sanitizeSource(raw: unknown): SceneSource | null {
   const textContent = typeof o.textContent === 'string' ? o.textContent : undefined;
   const countdownSeconds =
     typeof o.countdownSeconds === 'number' ? o.countdownSeconds : undefined;
-  return { id, typeId, name, enabled, imagePath, textContent, countdownSeconds };
+  const videoPath = typeof o.videoPath === 'string' ? o.videoPath : undefined;
+  const linkUrl = typeof o.linkUrl === 'string' ? o.linkUrl : undefined;
+  const captureTarget = typeof o.captureTarget === 'string' ? o.captureTarget : undefined;
+  const captureSourceId = typeof o.captureSourceId === 'string' ? o.captureSourceId : undefined;
+  const captureMode =
+    o.captureMode === 'any-fullscreen' || o.captureMode === 'specific' ? o.captureMode : undefined;
+  const captureCursor = typeof o.captureCursor === 'boolean' ? o.captureCursor : undefined;
+  const compatibleMode = typeof o.compatibleMode === 'boolean' ? o.compatibleMode : undefined;
+  const screenIndex = typeof o.screenIndex === 'number' ? o.screenIndex : undefined;
+  const deviceId = typeof o.deviceId === 'string' ? o.deviceId : undefined;
+  const deviceLabel = typeof o.deviceLabel === 'string' ? o.deviceLabel : undefined;
+  return {
+    id,
+    typeId,
+    name,
+    enabled,
+    imagePath,
+    textContent,
+    countdownSeconds,
+    videoPath,
+    linkUrl,
+    captureTarget,
+    captureSourceId,
+    captureMode,
+    captureCursor,
+    compatibleMode,
+    screenIndex,
+    deviceId,
+    deviceLabel,
+  };
 }
 
 export function sanitizeScenesPayload(data: unknown): { scenes: Scene[]; activeId: string } | null {

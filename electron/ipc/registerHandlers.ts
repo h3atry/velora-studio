@@ -74,11 +74,25 @@ export function registerExtendedIpcHandlers(broadcast: BroadcastFn) {
     const result = await dialog.showOpenDialog({
       properties: ['openFile'],
       filters: [
-        { name: 'Imagens', extensions: ['png', 'jpg', 'jpeg', 'gif', 'webp'] },
+        { name: 'Imagens', extensions: ['png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'tif', 'tiff'] },
       ],
     });
     if (result.canceled || !result.filePaths[0]) return null;
     return result.filePaths[0];
+  });
+
+  ipcMain.handle('dialog-open-video', async () => {
+    const result = await dialog.showOpenDialog({
+      properties: ['openFile'],
+      filters: [{ name: 'Vídeo', extensions: ['mp4', 'mov', 'webm', 'mkv'] }],
+    });
+    if (result.canceled || !result.filePaths[0]) return null;
+    return result.filePaths[0];
+  });
+
+  ipcMain.handle('capture-list-sources', async () => {
+    const { listCaptureSources } = await import('../services/captureSources');
+    return listCaptureSources();
   });
 
   ipcMain.handle('chat-filters-get', () => {

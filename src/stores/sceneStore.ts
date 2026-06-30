@@ -12,6 +12,16 @@ export interface SceneSource {
   imagePath?: string;
   textContent?: string;
   countdownSeconds?: number;
+  videoPath?: string;
+  linkUrl?: string;
+  captureTarget?: string;
+  captureSourceId?: string;
+  captureMode?: 'any-fullscreen' | 'specific';
+  captureCursor?: boolean;
+  compatibleMode?: boolean;
+  screenIndex?: number;
+  deviceId?: string;
+  deviceLabel?: string;
 }
 
 export interface Scene {
@@ -37,16 +47,39 @@ interface SceneState {
   addScene: (copySources?: boolean) => void;
   openAddSourceModal: () => void;
   closeAddSourceModal: () => void;
-  addSourceToActiveScene: (typeId: SourceTypeId) => void;
+  addSourceToActiveScene: (
+    typeId: SourceTypeId,
+    config?: Partial<Omit<SceneSource, 'id' | 'typeId' | 'enabled'>>
+  ) => void;
   removeSource: (sourceId: string) => void;
   undoRemoveSource: () => void;
   renameSource: (sourceId: string, name: string) => void;
   toggleSource: (sourceId: string) => void;
   moveScene: (sceneId: string, direction: 'up' | 'down') => void;
+  removeScene: (sceneId: string) => void;
+  renameScene: (sceneId: string, name: string) => void;
   moveSource: (sourceId: string, direction: 'up' | 'down') => void;
   updateSourceConfig: (
     sourceId: string,
-    patch: Partial<Pick<SceneSource, 'imagePath' | 'textContent' | 'countdownSeconds'>>
+    patch: Partial<
+      Pick<
+        SceneSource,
+        | 'imagePath'
+        | 'textContent'
+        | 'countdownSeconds'
+        | 'videoPath'
+        | 'linkUrl'
+        | 'captureTarget'
+        | 'captureSourceId'
+        | 'captureMode'
+        | 'captureCursor'
+        | 'compatibleMode'
+        | 'screenIndex'
+        | 'deviceId'
+        | 'deviceLabel'
+        | 'name'
+      >
+    >
   ) => void;
   hydrateFromPersist: () => Promise<void>;
 }
@@ -90,18 +123,24 @@ export const useSceneStore = create<SceneState>((set, get) => ({
   openAddSourceModal: () => set({ showAddSourceModal: true }),
   closeAddSourceModal: () => set({ showAddSourceModal: false }),
 
-  addSourceToActiveScene: (typeId) => {
+  addSourceToActiveScene: (typeId, config) => {
     if (!isSourceImplemented(typeId)) return;
     const { scenes, activeSceneId } = get();
     const scene = scenes.find((s) => s.id === activeSceneId);
     if (!scene) return;
 
     const sameTypeCount = scene.sources.filter((s) => s.typeId === typeId).length;
+    const displayName =
+      config?.name?.trim() ||
+      config?.captureTarget?.trim() ||
+      defaultSourceName(typeId, sameTypeCount);
+
     const source: SceneSource = {
       id: `src-${Date.now()}`,
       typeId,
-      name: defaultSourceName(typeId, sameTypeCount),
+      name: displayName,
       enabled: true,
+      ...config,
     };
 
     const next = scenes.map((s) =>
@@ -109,6 +148,13 @@ export const useSceneStore = create<SceneState>((set, get) => ({
     );
     set({ scenes: next, showAddSourceModal: false });
     persistScenes(next, activeSceneId);
+
+    if (typeId === 'camera' && config?.deviceLabel) {
+      useAppStore.getState().updateStreamSettings({
+        cameraDeviceId: config.deviceId ?? '',
+        cameraLabel: config.deviceLabel,
+      });
+    }
   },
 
   removeSource: (sourceId) => {
@@ -190,6 +236,29 @@ export const useSceneStore = create<SceneState>((set, get) => ({
     if (newIdx < 0 || newIdx >= scenes.length) return;
     const next = [...scenes];
     [next[idx], next[newIdx]] = [next[newIdx], next[idx]];
+    set({ scenes: next });
+    persistScenes(next, activeSceneId);
+  },
+
+  removeScene: (sceneId) => {
+    const { scenes, activeSceneId } = get();
+    if (scenes.length <= 1) return;
+    const idx = scenes.findIndex((s) => s.id === sceneId);
+    if (idx < 0) return;
+    const next = scenes.filter((s) => s.id !== sceneId);
+    let newActiveId = activeSceneId;
+    if (activeSceneId === sceneId) {
+      newActiveId = next[Math.min(idx, next.length - 1)]?.id ?? next[0].id;
+    }
+    set({ scenes: next, activeSceneId: newActiveId });
+    persistScenes(next, newActiveId);
+  },
+
+  renameScene: (sceneId, name) => {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    const { scenes, activeSceneId } = get();
+    const next = scenes.map((s) => (s.id === sceneId ? { ...s, name: trimmed } : s));
     set({ scenes: next });
     persistScenes(next, activeSceneId);
   },

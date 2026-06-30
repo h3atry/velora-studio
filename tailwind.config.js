@@ -43,7 +43,7 @@ export default {
           accent: '#7c5cff',
         },
         tiktok: '#ff4668',
-        twitch: '#9b72f2',
+        twitch: '#9146FF',
       },
       boxShadow: {
         'pl-glow': '0 0 28px rgba(124, 92, 255, 0.4)',
