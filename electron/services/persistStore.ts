@@ -22,7 +22,8 @@ function readJson<T>(name: string, fallback: T): T {
     const raw = fs.readFileSync(path.join(dir(), name), 'utf-8');
     const parsed = JSON.parse(raw) as T & { schemaVersion?: number };
     if (parsed && typeof parsed === 'object' && 'schemaVersion' in parsed) {
-      const { schemaVersion: _, ...rest } = parsed as Record<string, unknown>;
+      const { schemaVersion: _schemaVersion, ...rest } = parsed as Record<string, unknown>;
+      void _schemaVersion;
       return rest as T;
     }
     return parsed;

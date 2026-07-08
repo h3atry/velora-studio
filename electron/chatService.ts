@@ -12,9 +12,7 @@ import { getValidAccessToken } from './auth/twitchAuth';
 const MAX_MESSAGES = 500;
 
 let messages: UnifiedChatMessage[] = [];
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let twitchClient: any = null;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let tiktokConnection: any = null;
 
 let connectionStatus: ChatConnectionStatus = {
