@@ -22,7 +22,7 @@
     "lint": "eslint src electron --ext .ts,.tsx"
   },
   "dependencies": {
-    "dotenv": "^17.4.2",
+    "dotenv": "^18.0.0",
     "electron-updater": "^6.3.9",
     "ffmpeg-static": "^5.3.0",
     "lucide-react": "^0.469.0",
